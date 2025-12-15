@@ -16,5 +16,15 @@ jobs:
       - name: Build Docker image
         run: docker build -t robot-test .
 
-      - name: Run Robot Framework test
-        run: docker run robot-test
+      - name: Run Robot Framework tests
+        run: |
+          docker run --name robot-container robot-test
+          docker cp robot-container:/app/results ./results
+          docker rm robot-container
+
+      - name: Upload Robot Framework results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: results
