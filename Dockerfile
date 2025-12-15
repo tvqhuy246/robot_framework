@@ -15,4 +15,4 @@ WORKDIR /app
 COPY . .
 
 # Chạy test
-CMD ["robot", "tests"]
+CMD ["robot", "test"]
