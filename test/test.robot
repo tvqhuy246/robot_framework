@@ -8,12 +8,12 @@ ${BROWSER}  chrome
 
 *** Keywords ***
 Open Chrome Headless
-    ${options}=    Evaluate    __import__('selenium.webdriver').ChromeOptions()    
+    ${options}=    Evaluate    __import__('selenium.webdriver.chrome.options').Options()    sys, selenium.webdriver.chrome.options
     Call Method    ${options}    add_argument    --headless
     Call Method    ${options}    add_argument    --no-sandbox
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
     Call Method    ${options}    add_argument    --disable-gpu
-    Create WebDriver    ${BROWSER}    chrome_options=${options}
+    Create WebDriver    ${BROWSER}    options=${options}
 
 *** Test Cases ***
 Check Registration Page
