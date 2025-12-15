@@ -20,8 +20,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Download ChromeDriver mới nhất từ Google (đảm bảo tương thích với Chromium)
-RUN wget -q -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$(wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip \
+# Download ChromeDriver version 143.0.7499.42 (match với Chromium 143)
+RUN wget -q -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/143.0.7499.42/chromedriver_linux64.zip \
     && unzip /tmp/chromedriver.zip -d /usr/bin/ \
     && rm /tmp/chromedriver.zip \
     && chmod +x /usr/bin/chromedriver
