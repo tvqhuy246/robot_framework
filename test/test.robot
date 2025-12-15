@@ -4,28 +4,26 @@ Library    Collections
 
 *** Variables ***
 ${URL}      https://web.evbtranding.site/register
-${BROWSER}  chrome
+${BROWSER}  Chrome
 
 *** Keywords ***
 Open Chrome Headless
-    ${options}=    Evaluate    __import__('selenium.webdriver.chrome.options').Options()    sys, selenium.webdriver.chrome.options
+    ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium.webdriver  # Cú pháp Selenium 4
     Call Method    ${options}    add_argument    --headless
     Call Method    ${options}    add_argument    --no-sandbox
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
     Call Method    ${options}    add_argument    --disable-gpu
-    Create WebDriver    ${BROWSER}    options=${options}
+    Open Browser    ${URL}    ${BROWSER}    options=${options}  # Dùng Open Browser cho compatibility
 
 *** Test Cases ***
 Check Registration Page
     Open Chrome Headless
-    Go To    ${URL}
     Maximize Browser Window
     Wait Until Page Contains Element    xpath=//input[@type='email']    10s
     Close Browser
 
 Successful Registration
     Open Chrome Headless
-    Go To    ${URL}
     Maximize Browser Window
     Input Text    xpath=//input[@type='email']        test123@gmail.com
     Input Text    xpath=//input[@type='password']     Test@123456

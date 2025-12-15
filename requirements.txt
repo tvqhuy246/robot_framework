@@ -1,6 +1,3 @@
-robotframework
-robotframework-seleniumlibrary
-robotframework-requests
-robotframework-databaselibrary
-pymysql
-psycopg2-binary
+robotframework==6.1.1
+robotframework-seleniumlibrary==6.2.0
+selenium==4.15.2
