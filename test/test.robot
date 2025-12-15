@@ -1,5 +1,6 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    Collections
 
 *** Variables ***
 ${URL}      https://web.evbtranding.site/register
@@ -7,7 +8,7 @@ ${BROWSER}  chrome
 
 *** Keywords ***
 Open Chrome Headless
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    ${options}=    Evaluate    __import__('selenium.webdriver').ChromeOptions()    
     Call Method    ${options}    add_argument    --headless
     Call Method    ${options}    add_argument    --no-sandbox
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
@@ -26,10 +27,8 @@ Successful Registration
     Open Chrome Headless
     Go To    ${URL}
     Maximize Browser Window
-
     Input Text    xpath=//input[@type='email']        test123@gmail.com
     Input Text    xpath=//input[@type='password']     Test@123456
     Click Button  xpath=//button[@type='submit']
-
     Wait Until Page Contains    Registration Successful    10s
     Close Browser

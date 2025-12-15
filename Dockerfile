@@ -3,7 +3,7 @@ FROM python:3.10-slim
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Cài Chromium + dependency cần thiết
+# Cài Chromium + dependency
 RUN apt-get update && apt-get install -y \
     chromium \
     chromium-driver \
@@ -20,19 +20,18 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Chromium path cho Selenium
 ENV CHROME_BIN=/usr/bin/chromium
 ENV CHROMEDRIVER_BIN=/usr/bin/chromedriver
 
-# Tạo thư mục app
 WORKDIR /app
 
-# Copy & install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source
 COPY . .
 
-# Chạy test Robot
+# Tạo thư mục results để lưu report
+RUN mkdir -p /app/results
+
+# CMD mặc định chạy Robot Framework
 CMD ["robot", "-d", "results", "test"]
