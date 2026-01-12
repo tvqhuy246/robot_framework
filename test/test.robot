@@ -26,12 +26,19 @@ Scroll And Click Button
     Wait Until Element Is Visible    ${locator}    10s
     Click Button    ${locator}
 
+Teardown With Debug
+    Run Keyword If Test Failed    Log Location
+    Run Keyword If Test Failed    Capture Page Screenshot
+    ${html}=    Run Keyword If Test Failed    Get Source
+    Run Keyword If Test Failed    Log    ${html}
+    Close Browser
+
 *** Test Cases ***
 # --- REGISTRATION TEST CASES ---
 
 Registration - Successful With Valid Data
     [Documentation]    Verify user can register with valid email and password
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${REGISTER_URL}
     Maximize Browser Window
@@ -44,24 +51,20 @@ Registration - Successful With Valid Data
     # After registration, assuming it redirects to login or stays on page. 
     # If it redirects to Login, we should see the Email Input.
     Wait Until Page Contains Element    xpath=//input[@type='email']    20s
-    Capture Page Screenshot
 
 Registration - Fail Empty Fields
     [Documentation]    Verify registration fails when fields are empty
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${REGISTER_URL}
     Maximize Browser Window
     Scroll And Click Button    xpath=//button[@type='submit']
     # Assuming HTML5 validation or simple JS alert/error message
-    # Note: Specific error message needs to be verified on actual site. 
-    # Using 'Wait Until Page Does Not Contain' as a generic failure check if explicit error is unknown
     Wait Until Page Contains Element    xpath=//input[@type='email']    10s
-    Capture Page Screenshot
 
 Registration - Fail Invalid Email Format
     [Documentation]    Verify registration fails with invalid email format
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${REGISTER_URL}
     Maximize Browser Window
@@ -69,12 +72,11 @@ Registration - Fail Invalid Email Format
     Input Text    xpath=//input[@type='password']     ${PASSWORD}
     Scroll And Click Button    xpath=//button[@type='submit']
     # Check that we are still on the registration page (input field still exists)
-    Page Should Contain Element    xpath=//input[@type='email']
-    Capture Page Screenshot
+    Wait Until Page Contains Element    xpath=//input[@type='email']    10s
 
 Registration - Fail Short Password
     [Documentation]    Verify registration fails with short password
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${REGISTER_URL}
     Maximize Browser Window
@@ -82,14 +84,13 @@ Registration - Fail Short Password
     Input Text    xpath=//input[@type='password']     123
     Scroll And Click Button    xpath=//button[@type='submit']
     # Check that we are still on the registration page
-    Page Should Contain Element    xpath=//input[@type='email']
-    Capture Page Screenshot
+    Wait Until Page Contains Element    xpath=//input[@type='email']    10s
 
 # --- LOGIN TEST CASES ---
 
 Login - Successful With Valid Credentials
     [Documentation]    Verify user can login with registered credentials
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${LOGIN_URL}
     Maximize Browser Window
@@ -98,11 +99,10 @@ Login - Successful With Valid Credentials
     Input Text    xpath=//input[@type='password']     ${PASSWORD}
     Scroll And Click Button    xpath=//button[@type='submit']
     Sleep    3s
-    Capture Page Screenshot
 
 Login - Fail Wrong Password
     [Documentation]    Verify login fails with correct email but wrong password
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${LOGIN_URL}
     Maximize Browser Window
@@ -112,11 +112,10 @@ Login - Fail Wrong Password
     Scroll And Click Button    xpath=//button[@type='submit']
     # Should stay on login page or show error
     Wait Until Page Contains Element    xpath=//input[@type='email']    10s
-    Capture Page Screenshot
 
 Login - Fail Unregistered Email
     [Documentation]    Verify login fails with unregistered email
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${LOGIN_URL}
     Maximize Browser Window
@@ -125,22 +124,14 @@ Login - Fail Unregistered Email
     Input Text    xpath=//input[@type='password']     ${PASSWORD}
     Scroll And Click Button    xpath=//button[@type='submit']
     # Should stay on login page or show error
-    Page Should Contain Element    xpath=//input[@type='email']
-    Capture Page Screenshot
+    Wait Until Page Contains Element    xpath=//input[@type='email']    10s
 
 Login - Fail Empty Credentials
     [Documentation]    Verify login fails with empty fields
-    [Teardown]    Close Browser
+    [Teardown]    Teardown With Debug
     Open Chrome Headless
     Go To    ${LOGIN_URL}
     Maximize Browser Window
     Scroll And Click Button    xpath=//button[@type='submit']
-    Scroll And Click Button    xpath=//button[@type='submit']
-    # Debugging strange failure
-    Sleep    2s
-    Log Location
-    ${html}=    Get Source
-    Log    ${html}
+    # Should stay on login page
     Wait Until Page Contains Element    xpath=//input[@type='email']    10s
-    Capture Page Screenshot
-    Capture Page Screenshot
