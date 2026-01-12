@@ -4,6 +4,7 @@ on:
   push:
     branches: [ "qhuy" ]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   robot-tests:
